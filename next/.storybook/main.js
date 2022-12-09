@@ -25,9 +25,11 @@ module.exports = {
   ],
   framework: "@storybook/react",
   core: {
-    builder: "@storybook/builder-webpack5",
+    builder: "webpack5",
   },
+  staticDirs: ['../public'],
   webpackFinal: async (config) => {
+    // https://storybook.js.org/docs/react/builders/webpack#typescript-module-resolution
     config.resolve.plugins = [
       ...(config.resolve.plugins || []),
       new TsconfigPathsPlugin({
@@ -38,14 +40,6 @@ module.exports = {
       ...config.resolve.alias,
       "next-i18next": "react-i18next",
     };
-    /**
-     * Fixes font import with /
-     * @see https://github.com/storybookjs/storybook/issues/12844#issuecomment-867544160
-     */
-    config.resolve.roots = [
-      path.resolve(__dirname, "../public"),
-      "node_modules",
-    ];
     return config;
   },
 };
